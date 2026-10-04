@@ -1,169 +1,331 @@
-# AeroPulse: Air Quality Forecasting & Model Intelligence
-### Empirical Machine Learning & Deep Sequence Modeling for Ambient Air Quality
+# AeroPulse: AI-Powered Ambient Air Quality Forecasting & Policy Intelligence System
 
 [![Python 3.12](https://img.shields.io/badge/Python-3.12-3776AB.svg?logo=python&logoColor=white)](https://www.python.org/)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.2-EE4C2C.svg?logo=pytorch&logoColor=white)](https://pytorch.org/)
 [![XGBoost](https://img.shields.io/badge/XGBoost-2.0-228B22.svg)](https://xgboost.readthedocs.io/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.110-009688.svg?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
-[![Tests](https://img.shields.io/badge/Tests-11%20Passed-brightgreen.svg)]()
+[![Tests](https://img.shields.io/badge/Tests-29%20Passed%20(100%25)-brightgreen.svg)]()
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)]()
 
-A scientifically disciplined, leak-free time-series forecasting system evaluating gradient boosting, deep sequence architectures (Bi-LSTM, Bi-GRU, Dilated TCN), and stacked ensembles under a strictly prior-only formulation:
+> **"Understand your air. Make better decisions."**  
+> AeroPulse is an end-to-end ambient air quality intelligence platform combining strictly leak-free machine learning forecasting across 6 major Indian metropolitan airsheds with a statutory policy retrieval-augmented generation (RAG) assistant for citizens and environmental policymakers.
+
+---
+
+## 1. System Overview
+
+AeroPulse bridges the gap between high-dimensional environmental time-series modeling and actionable public health policy. The platform unifies:
+1. **Empirical Multi-City Forecasting**: Leakage-safe, prior-only sequence and tabular machine learning models (XGBoost, Bi-LSTM, Bi-GRU, Dilated TCN, Extra Trees, and Heterogeneous Stacking Ensembles) trained across 6 major Indian cities (Delhi, Gurugram, Bengaluru, Chennai, Hyderabad, Patna).
+2. **Policy Intelligence RAG Engine**: A hybrid dense-sparse (FAISS + BM25) retrieval pipeline grounded in official statutory frameworks including the Graded Response Action Plan (GRAP 2024), National Clean Air Programme (NCAP), Air (Prevention and Control of Pollution) Act 1981, and CPCB National Ambient Air Quality Standards (NAAQS).
+3. **Dual-Mode Interactive Application**:
+   - **Public AI Assistant**: Conversational citizen interface for daily health advisories, outdoor safety guidance, and statutory awareness.
+   - **Government & Analytics Intelligence**: Real-time forecast evaluation, model ablation comparison, criteria pollutant trends, and statutory intervention simulation.
+
+---
+
+## 2. Core Capabilities
+
+- **Strict Prior-Only Causal Formulation**: Eliminates contemporaneous leakage by enforcing $X(t-14, \dots, t-1) \to \text{AQI}(t)$ with shifted rolling statistics and split-isolated scalers.
+- **Heterogeneous Stacking Ensembles**: Evaluates multi-paradigm combinations (SE-1: XGBoost + Bi-LSTM + TCN; SE-2: XGBoost + Bi-GRU + TCN) fused via an Extra Trees meta-learner trained exclusively on out-of-fold (OOF) cross-validation predictions.
+- **Multi-City Airshed Generalization**: Multi-city spatial coverage across Northern, Eastern, and Southern Indian meteorological regimes.
+- **Hybrid Sparse-Dense Policy Retrieval**: Reciprocal Rank Fusion (RRF) combining BM25 keyword matching with dense sentence embeddings (`all-MiniLM-L6-v2`) over authoritative Indian environmental statutes.
+- **Multi-Tiered LLM Provider Architecture**: Seamless runtime failover across NVIDIA NIM (`openai/gpt-oss-20b`), Google Gemini, OpenAI (`gpt-4o-mini`), and a deterministic offline grounded template engine for zero-dependency local execution.
+- **Robust Guardrails & Intent Routing**: 9-class deterministic intent classifier with built-in prompt-injection neutralization, domain boundary enforcement, and statutory citation verification.
+
+---
+
+## 3. High-Level Architecture
 
 ```text
-X(t-14, ..., t-1) -> AQI(t)
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                              AEROPULSE PLATFORM                              │
+├──────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│   ┌───────────────────────────┐          ┌───────────────────────────────┐   │
+│   │    Public AI Assistant    │          │  Government Analytics Portal  │   │
+│   │ (Conversational Citizens) │          │    (Policymakers / Experts)   │   │
+│   └─────────────┬─────────────┘          └───────────────┬───────────────┘   │
+│                 │                                        │                   │
+│                 └──────────────────┬─────────────────────┘                   │
+│                                    ▼                                         │
+│                      FastAPI Application Gateway                             │
+│                  (/api/chat, /api/predict, /api/policy)                      │
+│                                    │                                         │
+│         ┌──────────────────────────┴──────────────────────────┐              │
+│         ▼                                                     ▼              │
+│   ┌──────────────────────────────┐              ┌──────────────────────────┐ │
+│   │    ML Forecasting Engine     │              │   Policy RAG Engine      │ │
+│   ├──────────────────────────────┤              ├──────────────────────────┤ │
+│   │ • 65 Tabular Features        │              │ • Chunked Statutory Docs │ │
+│   │ • 10-Channel 3D Sequences    │              │ • BM25 + FAISS Dense     │ │
+│   │ • XGBoost / Extra Trees      │              │ • Reciprocal Rank Fusion │ │
+│   │ • PyTorch Bi-LSTM / Bi-GRU   │              │ • Citation Verifier      │ │
+│   │ • Dilated Temporal Conv(TCN) │              │ • Prompt Guardrails      │ │
+│   │ • Stacking Meta-Learners     │              │ • Intent Classifier      │ │
+│   └──────────────┬───────────────┘              └────────────┬─────────────┘ │
+│                  │                                           │               │
+│                  └─────────────────────┬─────────────────────┘               │
+│                                        ▼                                     │
+│                       Multi-Tier LLM Provider Router                         │
+│             [ NVIDIA NIM  →  Gemini  →  OpenAI  →  Deterministic Offline ]   │
+└──────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## 1. What does this do?
+## 4. Repository Structure
 
-AeroPulse builds an end-to-end forecasting and environmental intelligence platform for the Delhi National Capital Region (NCR), one of the most severely polluted urban airsheds in the world. 
-
-The system:
-1. **Ingests and Cleans** 2,009 daily ground observations (2015–2020) from the Central Pollution Control Board (CPCB) India National Ambient Air Quality Network, unified with ECMWF ERA5 Atmospheric Reanalysis meteorology.
-2. **Engineers 114 Prior-Only Features**: Calendar encodings, cyclic harmonics, lag observations (t-1, t-2, t-3, t-7), shifted rolling statistics, and 3D sliding sequence tensors (W=14) with zero contemporaneous lookahead.
-3. **Trains and Evaluates 8 Architectures**: Climatological baseline, Standalone XGBoost, Extra Trees, PyTorch Bi-LSTM, PyTorch Bi-GRU, PyTorch Dilated TCN, and two Stacking Ensembles (SE-1 and SE-2) with Out-Of-Fold (OOF) cross-validation.
-4. **Serves an Interactive Web Dashboard**: Built with FastAPI and Bootstrap 5, enabling users to select any historical date to inspect the preceding 14-day context, run real-time model inference, and compare predictions against ground truth.
+```text
+AQI_Research_Project/
+├── app/
+│   ├── main.py                     # FastAPI server, REST routes & lifecycle
+│   ├── static/                     # Static CSS/JS assets
+│   └── templates/
+│       └── index.html              # Unified Public Assistant & Gov Dashboard UI
+├── data/
+│   ├── cache/                      # Precomputed RAG search indices (rag_index.pkl)
+│   ├── interim/                    # Merged multi-city daily series & weather
+│   ├── policy_documents/           # Statutory corpus (GRAP 2024, NCAP, Air Act)
+│   ├── processed/                  # Scaled dataset bundles (dataset_bundle.pkl, research_bundle.pkl)
+│   └── raw/                        # CPCB raw observations (city_day.csv, weather_daily.csv)
+├── experiments/
+│   ├── research/                   # Multi-city research benchmark & SHAP scripts
+│   │   ├── run_full_pipeline.py    # Full multi-city pipeline orchestrator
+│   │   ├── run_training.py         # Multi-city model training & evaluation
+│   │   ├── run_shap_analysis.py    # SHAP feature importance analysis
+│   │   └── generate_shap_final.py  # SHAP publication figures generator
+│   └── run_full_prior_experiments.py # Delhi NCR baseline experiment runner
+├── notebooks/
+│   └── 01_exploratory_data_analysis.ipynb # Comprehensive EDA & visualization notebook
+├── results/
+│   ├── figures/                    # Publication charts (model comparison, residuals, etc.)
+│   ├── metrics/                    # Saved evaluation metrics and ablation tables
+│   ├── predictions/                # Out-of-sample prediction artifacts
+│   ├── reports/                    # Statistical hypothesis tests & significance reports
+│   └── research/                   # Multi-city research figures, tables & SHAP artifacts
+├── src/
+│   ├── data/                       # Ingestion, validation, and interpolation modules
+│   ├── features/                   # Prior-only feature engineering & sequence builders
+│   ├── models/                     # PyTorch deep sequence models & gradient boosting
+│   ├── rag/                        # Complete Policy RAG & Conversational Assistant
+│   │   ├── assistant.py            # Public conversational assistant & intent router
+│   │   ├── chunker.py              # Semantic markdown & text chunking pipeline
+│   │   ├── document_loader.py      # Multi-format statutory document loader
+│   │   ├── evaluator.py            # Automated RAG evaluation & failure mode auditing
+│   │   ├── generator.py            # Multi-provider LLM response generator
+│   │   ├── pipeline.py             # End-to-end Policy RAG coordinator
+│   │   ├── retriever.py            # Hybrid BM25 + FAISS dense retriever
+│   │   └── schemas.py              # Pydantic validation schemas
+│   ├── stacking/                   # TimeSeriesSplit OOF stacking meta-learner
+│   └── utils/                      # Project logging and configuration helpers
+├── tests/
+│   ├── test_api.py                 # REST endpoint integration tests
+│   ├── test_assistant.py           # Public assistant intent & safety unit tests
+│   ├── test_leakage.py             # Temporal leakage & causal integrity tests
+│   ├── test_rag.py                 # RAG retrieval, citation & guardrail tests
+│   └── test_stacking.py            # OOF stacking validation tests
+├── PROJECT_LOG.md                  # Comprehensive engineering & research decision log
+├── pytest.ini                      # Pytest runner configuration
+├── requirements.txt                # Production & research dependencies
+└── README.md                       # Complete platform documentation
+```
 
 ---
 
-## 2. How do I run it?
+## 5. Technology Stack
 
-### 2.1 Environment Setup
+- **Core Runtime**: Python 3.12
+- **Machine Learning & Deep Learning**:
+  - `xgboost` (2.0+) — Gradient boosted decision trees
+  - `scikit-learn` (1.4+) — Extra Trees, preprocessing, time-series splits
+  - `torch` (2.2+) — PyTorch for Bi-LSTM, Bi-GRU, and Dilated TCN sequence models
+  - `shap` (0.44+) — TreeExplainer & DeepExplainer game-theoretic interpretability
+- **Retrieval-Augmented Generation (RAG)**:
+  - `sentence-transformers` (`all-MiniLM-L6-v2`) — Dense semantic embeddings
+  - `faiss-cpu` — Dense vector similarity index
+  - `rank_bm25` — Lexical sparse BM25 scoring
+- **Web & API Framework**:
+  - `fastapi` & `uvicorn` — Asynchronous REST API
+  - `jinja2` — Dynamic template rendering
+  - `pydantic` — Strict request/response payload validation
+  - `Bootstrap 5` & `Chart.js` — Responsive UI and interactive timeseries visualization
+
+---
+
+## 6. Installation & Setup
+
+### 6.1 Clone the Repository
 ```bash
-# Clone the repository
-git clone <repo-url>
-cd AQI_Research_Project
+git clone https://github.com/Sohamk22/aeropulse-ai.git
+cd aeropulse-ai
+```
 
-# Create and activate virtual environment
+### 6.2 Create and Activate Virtual Environment
+```bash
 python3 -m venv venv
 source venv/bin/activate
+```
 
-# Install required dependencies
+### 6.3 Install Dependencies
+```bash
+pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-### 2.2 Dataset Sourcing & Local Structure
-The repository relies on historical observational records:
-* **Pollutant Data Source:** Central Pollution Control Board (CPCB) India National Ambient Air Quality Monitoring Programme (NAAQM), published under official open data initiatives. Expected path: `data/raw/city_day.csv` (2.5 MB).
-* **Meteorological Data Source:** European Centre for Medium-Range Weather Forecasts (ECMWF) ERA5 atmospheric reanalysis for Delhi NCR coordinates. Expected path: `data/raw/weather_daily.csv` (46 KB).
-* **Processed Bundle:** The feature engineering pipeline parses and saves precomputed sequence and tabular matrices to `data/processed/dataset_bundle.pkl` (4.0 MB) to enable instantaneous dashboard inference and benchmark reproducibility. All data files are compact and tracked directly in the repository without requiring external cloud buckets or Git LFS.
+---
 
-### 2.3 Run Automated Verification Tests
-Run the 11 unit tests verifying leakage prevention, rolling shift enforcement, scaler isolation, and API integrity:
+## 7. Environment Variables & LLM Configuration
+
+AeroPulse is designed to operate seamlessly both **online** (with cloud LLM providers) and **offline** (100% deterministic fallback without API keys).
+
+To enable live LLM synthesis, create a `.env` file or export environment variables:
+
+```bash
+# Optional: NVIDIA NIM API (Primary live provider)
+export NVIDIA_API_KEY="nvapi-..."
+export NVIDIA_BASE_URL="https://integrate.api.nvidia.com/v1"
+export NVIDIA_MODEL="openai/gpt-oss-20b"
+
+# Optional: Google Gemini API (Secondary live provider)
+export GEMINI_API_KEY="AIzaSy..."
+export GEMINI_MODEL="gemini-1.5-flash"
+
+# Optional: OpenAI API (Tertiary live provider)
+export OPENAI_API_KEY="sk-..."
+export OPENAI_MODEL="gpt-4o-mini"
+```
+
+### Provider Fallback Priority
+1. **NVIDIA NIM** (if `NVIDIA_API_KEY` is present)
+2. **Google Gemini** (if `GEMINI_API_KEY` is present)
+3. **OpenAI** (if `OPENAI_API_KEY` is present)
+4. **Deterministic Offline Grounded Engine** (default fallback when no keys are configured)
+
+---
+
+## 8. Running the Application
+
+### 8.1 Launch the FastAPI Server
+```bash
+uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+```
+
+Open your browser and navigate to:
+```text
+http://localhost:8000
+```
+
+### 8.2 Interacting with the Application
+- **Public Assistant View**: Ask natural-language questions such as:
+  - *"Is it safe for a morning jog today?"*
+  - *"What GRAP Stage 3 emergency actions are in effect?"*
+  - *"Why is Delhi's AQI spiking this week?"*
+  - *"What legal authority empowers the CPCB to shut down polluting industries?"*
+- **Government Analytics View**: Switch to the expert dashboard to view:
+  - Model point forecasts vs actuals (XGBoost, SE-1, SE-2, Extra Trees)
+  - 14-day criteria pollutant trajectories (PM2.5, PM10, NO2, SO2, CO, O3)
+  - Statutory policy advisory synthesis with active citation links
+  - Cross-model residual distributions and performance benchmarks
+
+---
+
+## 9. Automated Testing Suite
+
+The repository includes a comprehensive test suite covering data leakage, model stacking, REST APIs, RAG retrieval, guardrails, and conversational intent routing:
+
 ```bash
 pytest tests/ -v
 ```
 
-### 2.4 Execute Full Experimental Benchmark
-Trains all models, executes 5-fold TimeSeriesSplit stacking, multi-seed stability (3 seeds), statistical hypothesis tests, and generates publication figures:
-```bash
-PYTHONPATH=. python experiments/run_full_prior_experiments.py
-```
-
-### 2.5 Run the Exploratory Data Analysis Notebook
-Open and run `notebooks/01_exploratory_data_analysis.ipynb` in Jupyter or VS Code:
-```bash
-jupyter notebook notebooks/01_exploratory_data_analysis.ipynb
-```
-
-### 2.6 Launch Web Dashboard
-Start the local FastAPI server:
-```bash
-uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
-```
-Navigate to `http://localhost:8000` to interact with:
-* **Forecast AQI:** Select any date in the evaluation period to forecast using preceding 14-day data.
-* **Environmental Insights:** Inspect 30-day historical criteria pollutant curves and summary metrics.
-* **Model Benchmark:** Review official performance metrics and latency numbers.
+### Test Coverage Highlights (29/29 Passing)
+- `tests/test_leakage.py`: Verifies zero contemporaneous feature leakage, strict 1-step rolling window shifting, and split-isolated scalers.
+- `tests/test_stacking.py`: Validates 5-fold TimeSeriesSplit out-of-fold execution and Extra Trees meta-learner isolation.
+- `tests/test_api.py`: Tests `/api/predict`, `/api/insights`, `/api/available_dates`, and `/api/metrics`.
+- `tests/test_rag.py`: Verifies document chunking, hybrid BM25+FAISS retrieval, citation accuracy, unanswerable query refusal, and prompt injection defense.
+- `tests/test_assistant.py`: Verifies intent routing across all 9 intent categories, response structure, and domain boundary enforcement.
 
 ---
 
-## 3. What did you find?
+## 10. Machine Learning & Multi-City Research Findings
 
-### 3.1 Headline Result: XGBoost is the Definitive Top Performer
-XGBoost achieved the best overall point-forecasting performance on the held-out test period, while SE-2 was the strongest evaluated ensemble.
+### 10.1 Multi-City Empirical Benchmark
+The research pipeline evaluated standalone and stacked models across 6 major Indian cities (Delhi, Gurugram, Bengaluru, Chennai, Hyderabad, Patna) representing 7,843 total daily observations under strict out-of-sample temporal testing (1,770 test samples):
 
-| Model Architecture | Framework | Test RMSE (lower is better) | Test MAE (lower is better) | Test MAPE (%) | Test R² (higher is better) | Multi-Seed Stability (3 Seeds) | Inference Latency |
-| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| **Historical Climatology** (±7 days) | NumPy | 100.45 | 83.17 | 61.09% | 0.2097 | N/A | 1.753 ms |
-| **TCN (Standalone)** | PyTorch | 77.24 | 57.62 | 34.91% | 0.5328 | 79.12 ± 1.59 | 0.248 ms |
-| **Bi-LSTM (Standalone)** | PyTorch | 59.15 | 45.72 | 27.77% | 0.7260 | 54.07 ± 4.17 | 0.076 ms |
-| **SE-1 (XGB + Bi-LSTM + TCN)** | Ensemble | 45.85 | 37.97 | 27.28% | 0.8354 | 44.15 ± 1.96 | 0.268 ms |
-| **Bi-GRU (Standalone)** | PyTorch | 42.67 | 30.73 | 16.93% | 0.8574 | 44.11 ± 2.00 | 0.051 ms |
-| **SE-2 (XGB + Bi-GRU + TCN)** | Ensemble | 39.14 | 29.84 | 17.82% | 0.8800 | 40.55 ± 1.12 | 0.306 ms |
-| **Extra Trees (Standalone)** | Sklearn | 36.37 | 26.90 | 16.09% | 0.8964 | N/A | 0.086 ms |
-| **XGBoost (Standalone)** | **XGBoost** | **34.58** | **26.08** | **15.99%** | **0.9063** | **34.49 ± 0.16** | **0.016 ms** |
+| Model Architecture | Model Paradigm | Test RMSE ↓ | Test MAE ↓ | Test R² ↑ | Multi-City Stability |
+| :--- | :---: | :---: | :---: | :---: | :---: |
+| **XGBoost (Standalone)** | Gradient Boosted Trees | **28.10** | **18.94** | **0.9225** | High |
+| **Extra Trees (Standalone)** | Randomized Forest Ensemble | **28.37** | **19.12** | **0.9210** | High |
+| **SE-1 (XGB + BiLSTM + TCN)** | Stacked Meta-Learner (ET) | **30.81** | **20.45** | **0.9068** | Moderate |
+| **SE-2 (XGB + BiGRU + TCN)** | Stacked Meta-Learner (ET) | **42.53** | **28.74** | **0.8224** | Moderate |
+| **Dilated TCN (Standalone)** | Deep Temporal Convolution | **45.55** | **31.20** | **0.7963** | Moderate |
+| **Bi-GRU (Standalone)** | Recurrent Sequence Model | 108.15 | 78.40 | -0.1482 | Low |
+| **Bi-LSTM (Standalone)** | Recurrent Sequence Model | 109.69 | 79.15 | -0.1810 | Low |
 
-*Evaluated on the held-out Delhi test partition (402 held-out test days, May 27, 2019 to July 1, 2020).*
-
-### 3.2 Key Scientific Insights
-1. **Tree Models Dominate Tabular Time-Series**: Standalone XGBoost trained on 114 carefully engineered lag and rolling statistics outperformed all deep neural sequence models and multi-model stacking ensembles (Diebold-Mariano test p = 0.00054). It was also **16x faster** in inference latency (0.016 ms/sample).
-2. **SE-2 Decisively Beats SE-1**: In a controlled comparison between recurrent cell architectures inside stacking, SE-2 (Bi-GRU) achieved significantly lower error than SE-1 (Bi-LSTM) (RMSE 39.14 vs. 45.85, paired t = -8.74, p < 1e-16) with 43% tighter multi-seed stability (SD 1.12 vs. 1.96). However, SE-2 did not surpass standalone XGBoost.
-3. **Complementarity in Extremes**: While XGBoost had the lowest overall point error, deep sequence models provided orthogonal inductive bias during extreme pollution spikes (z > 3.0); stacking in SE-1 reduced peak spike underestimation from 70.5 to 40.8 AQI points.
+### 10.2 Key Research Insights
+1. **Tree Ensembles Excel on Prior Features**: Gradient boosted and randomized decision trees decisively outperformed standalone deep recurrent sequence models on daily atmospheric tabular data.
+2. **SE-1 Outperforms SE-2**: In multi-city stacking, the combination of Bi-LSTM and TCN temporal representations with XGBoost (SE-1) provided superior meta-learner regularization compared to Bi-GRU (SE-2).
+3. **Severe Event Complementarity**: While tree models achieved optimal mean metric scores, deep sequence models provided orthogonal inductive bias during extreme winter spike events ($Z > 3.0$), dampening peak underestimation error.
 
 ---
 
-## 4. What would you do next?
+## 11. Policy RAG & Intelligence System
 
-1. **Multi-Horizon Forecasting**: Extend from 1-day ahead (tau = 1) to multi-step recursive and direct horizons (tau = 1, 2, 3, 7 days).
-2. **Multi-City Spatio-Temporal Graph Networks**: Expand the pipeline across all 26 CPCB cities using Spatio-Temporal Graph Neural Networks (ST-GNN) to model atmospheric advection and cross-city pollutant transport.
-3. **Numerical Weather Prediction (NWP) Forcing**: Ingest forecasted meteorological variables from numerical models (e.g. GFS / ECMWF 24-48h weather forecasts) rather than relying exclusively on past weather lags.
-4. **Extreme-Value Loss Optimization**: Implement asymmetric Pinball / Huber loss penalizing underestimation during severe winter pollution episodes.
+### 11.1 Indexed Statutory Corpus
+The policy knowledge base indexes key Indian environmental regulations located in `data/policy_documents/`:
+- **GRAP 2024**: Graded Response Action Plan for Delhi-NCR (Stages I–IV triggers, dust control, vehicular restrictions, industrial closures).
+- **NCAP Guidelines**: National Clean Air Programme reduction targets, city action plans, and monitoring protocols.
+- **Air Act 1981**: Statutory powers of State and Central Pollution Control Boards under Sections 19, 21, and 31A.
+- **CPCB NAAQS Standards**: National Ambient Air Quality Standards for criteria pollutants ($PM_{2.5}, PM_{10}, NO_2, SO_2, CO, O_3$).
+
+### 11.2 Hybrid Retrieval & Verification
+1. **Semantic Chunking**: Documents are split into coherent structural chunks with metadata tags (Act, Section, Severity Threshold, Target Pollutant).
+2. **Reciprocal Rank Fusion**: Merges lexical BM25 rankings with dense vector cosine similarity to ensure precise statutory section matching.
+3. **Grounded Synthesis & Defense**: LLM synthesis enforces strict statutory citations (`[Doc: Section]`) and rejects adversarial prompt injection attempts.
 
 ---
 
-## 5. Audit & Leakage Discovery
+## 12. API Reference
 
-During an architectural audit of early research prototypes, a critical methodological vulnerability was identified and resolved:
-* **The Issue:** Early academic implementations often compute rolling statistics or feature matrices that include unlagged observations from timestamp t, or fit scalers across the full dataset prior to temporal splitting. In AQI forecasting, same-day pollutant values contain near-perfect contemporaneous correlation with same-day AQI, creating massive artificial performance inflation.
-* **The Resolution:** All unlagged raw variables from day t were strictly eliminated. All rolling statistics now enforce `shifted = df[col].shift(1)` so index t is strictly excluded from window calculations. Scalers and IQR outlier bounds are fit strictly on the training partition, and the stacking meta-learner is trained exclusively on out-of-fold temporal cross-validation folds.
-
----
-
-## 6. Project Architecture & Directory Layout
-
+### Forecast Endpoint
+`POST /api/predict`
+```json
+{
+  "date": "2020-01-15"
+}
 ```
-AQI_Research_Project/
-├── app/                      # FastAPI backend & Jinja2 templates
-│   ├── main.py               # REST API endpoints (/api/predict, /api/available_dates, /api/insights)
-│   └── templates/index.html  # Responsive Bootstrap 5 user dashboard
-├── data/
-│   ├── raw/                  # CPCB city_day.csv and ERA5 weather_daily.csv
-│   ├── interim/              # Cleaned and merged daily time-series
-│   └── processed/            # Scaled feature tensors and train/test splits
-├── docs/                     # Methodological documentation & audit reports
-├── experiments/              # Full experiment runner and saved model checkpoints
-│   ├── run_full_prior_experiments.py
-│   ├── xgboost/, baseline/, bilstm/, bigru/, tcn/, se1/, se2/
-├── notebooks/
-│   └── 01_exploratory_data_analysis.ipynb   # Comprehensive Exploratory Data Analysis notebook
-├── results/
-│   ├── figures/              # Core figures (01 to 06)
-│   ├── metrics/              # Model comparison, ablation, and stability CSVs
-│   ├── predictions/          # Held-out test predictions
-│   └── reports/              # Statistical tests, spike analysis, DTW
-├── src/
-│   ├── data/                 # Ingestion and linear interpolation
-│   ├── features/             # Calendar, lag, shifted rolling, and 3D sequence builders
-│   ├── models/               # PyTorch (Bi-LSTM, Bi-GRU, TCN) & Tree models
-│   ├── stacking/             # TimeSeriesSplit OOF stacking ensemble engine
-│   └── utils/                # Configuration and logging utilities
-├── tests/                    # Unit test suite (11/11 passing)
-├── PROJECT_LOG.md            # Comprehensive engineering & research decision log
-├── requirements.txt          # Python dependencies
-└── README.md                 # Project documentation
+**Response**: Point forecasts for XGBoost, SE-1, SE-2, Extra Trees, consensus AQI, and 14-day prior historical pollutant context.
+
+### Public Assistant Chat Endpoint
+`POST /api/chat` or `POST /api/assistant/query`
+```json
+{
+  "query": "Is it safe for children to play outside this afternoon?",
+  "date": "2020-01-15",
+  "top_k": 5
+}
 ```
+**Response**: Intent-classified response, synthesized advisory, statutory policy citations, and risk assessment badge.
+
+### Policy Analysis Endpoint
+`POST /api/policy/analyze`
+```json
+{
+  "date": "2020-01-15",
+  "top_k": 5
+}
+```
+**Response**: Statutory severity category, triggered regulatory stages, mandated government interventions, and citation list.
 
 ---
 
-## 7. Technical Rigor & Scientific Validation
+## 13. Current Limitations & Future Roadmap
 
-* **Complex Dataset:** 5.5 years of continuous multi-pollutant criteria monitoring and ERA5 meteorology (Delhi NCR).
-* **Exploratory Analysis:** Documented in `notebooks/01_exploratory_data_analysis.ipynb` with 6 publication-ready figures.
-* **Data Integrity:** Strict causal feature construction with training-only outlier thresholding.
-* **Feature Engineering:** 114 lag, cyclic, and shifted rolling features + 14-day 3D sequence tensors.
-* **Models Implemented (8 Total):** Historical Climatology, Standalone XGBoost, Extra Trees, PyTorch Bi-LSTM, PyTorch Bi-GRU, PyTorch Dilated TCN, SE-1, and SE-2.
-* **Proper Cross-Validation:** 5-fold TimeSeriesSplit out-of-fold validation without lookahead.
-* **Held-Out Evaluation:** 20% chronological temporal partition (402 held-out test days) with full statistical significance testing.
-* **Reproducibility:** Multi-seed stability (mean ± SD across 3 seeds), deterministic initialization, and automated verification tests.
+1. **Multi-Horizon Forecasting**: Currently models 1-day ahead ($\tau = 1$). Expanding to multi-step direct autoregressive forecasting ($\tau \in \{1, 3, 7\}$ days) is planned.
+2. **Spatial Advection Modeling**: Future iterations will integrate Spatio-Temporal Graph Neural Networks (ST-GNN) to explicitly model inter-city atmospheric transport and wind advection vectors.
+3. **Numerical Weather Prediction (NWP) Forcing**: Integration with real-time operational meteorological forecasts (GFS / ECMWF) will supplement historical meteorological lags.
+
+---
+
+## 14. License & Attribution
+
+This project is developed under the MIT License. Atmospheric observational datasets are provided via the Central Pollution Control Board (CPCB) India Open Government Data platform and ECMWF ERA5 Atmospheric Reanalysis.
