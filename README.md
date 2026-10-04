@@ -1,11 +1,5 @@
-# AeroPulse: AI-Powered Ambient Air Quality Forecasting & Policy Intelligence System
+# AeroPulse: Air Quality Forecasting & Policy Intelligence System
 
-[![Python 3.12](https://img.shields.io/badge/Python-3.12-3776AB.svg?logo=python&logoColor=white)](https://www.python.org/)
-[![PyTorch](https://img.shields.io/badge/PyTorch-2.2-EE4C2C.svg?logo=pytorch&logoColor=white)](https://pytorch.org/)
-[![XGBoost](https://img.shields.io/badge/XGBoost-2.0-228B22.svg)](https://xgboost.readthedocs.io/)
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.110-009688.svg?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
-[![Tests](https://img.shields.io/badge/Tests-29%20Passed%20(100%25)-brightgreen.svg)]()
-[![License](https://img.shields.io/badge/License-MIT-blue.svg)]()
 
 > **"Understand your air. Make better decisions."**  
 > AeroPulse is an end-to-end ambient air quality intelligence platform combining strictly leak-free machine learning forecasting across 6 major Indian metropolitan airsheds with a statutory policy retrieval-augmented generation (RAG) assistant for citizens and environmental policymakers.
@@ -323,9 +317,3 @@ The policy knowledge base indexes key Indian environmental regulations located i
 1. **Multi-Horizon Forecasting**: Currently models 1-day ahead ($\tau = 1$). Expanding to multi-step direct autoregressive forecasting ($\tau \in \{1, 3, 7\}$ days) is planned.
 2. **Spatial Advection Modeling**: Future iterations will integrate Spatio-Temporal Graph Neural Networks (ST-GNN) to explicitly model inter-city atmospheric transport and wind advection vectors.
 3. **Numerical Weather Prediction (NWP) Forcing**: Integration with real-time operational meteorological forecasts (GFS / ECMWF) will supplement historical meteorological lags.
-
----
-
-## 14. License & Attribution
-
-This project is developed under the MIT License. Atmospheric observational datasets are provided via the Central Pollution Control Board (CPCB) India Open Government Data platform and ECMWF ERA5 Atmospheric Reanalysis.
